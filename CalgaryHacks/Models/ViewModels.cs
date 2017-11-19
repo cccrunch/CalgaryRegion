@@ -26,6 +26,10 @@ namespace CalgaryHacks.Models
             public string Lat { get; set; }
 
             public string Lng { get; set; }
+
+            public string Quadrant { get; set; }
+
+            public long Population { get; set; }
         }
 
         public class LoginModel
@@ -65,6 +69,14 @@ namespace CalgaryHacks.Models
             public User User { get; set; }
 
             public Event CurrentEvent { get; set; }
+        }
+
+        public class HeatMapModel
+        {
+            public List<PointsOfInterest> PoliceStations { get; set; }
+            public List<PointsOfInterest> FireStations { get; set; }
+            public List<PointsOfInterest> Libraries { get; set; }
+            public List<PointsOfInterest> CommunityCenters{ get; set; }
         }
     }
 }
