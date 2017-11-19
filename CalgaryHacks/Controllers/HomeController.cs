@@ -1,12 +1,10 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web.Mvc;
+﻿using System.Collections.Generic;
 using CalgaryHacks.Apis;
 using CalgaryHacks.DatabaseModel;
 using CalgaryHacks.Models;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace CalgaryHacks.Controllers
 {
@@ -17,8 +15,18 @@ namespace CalgaryHacks.Controllers
         public ActionResult Index()
         {
             ViewModels.EventViewModel eventViewModel = new ViewModels.EventViewModel();
-            eventViewModel.Events = EventCache.GetEventBag().ToList();
+            eventViewModel.Events = EventCache.GetEventBag();
             return View(eventViewModel);
+        }
+
+        public ActionResult About()
+        {
+            return View();
+        }
+
+        public ActionResult Documentation()
+        {
+            return View();
         }
 
         public ActionResult Register()
@@ -107,19 +115,22 @@ namespace CalgaryHacks.Controllers
         public ActionResult Chat(int roomId)
         {
 
-            User user = (User)HttpContext.Session["user"];
+            User user = (User) HttpContext.Session["user"];
             if (user == null)
             {
                 return RedirectToAction("Login", "Home");
             }
             ViewBag.roomId = roomId;
-            ViewBag.roomName = EventCache.GetEventBag().FirstOrDefault(x => x.Id == roomId)?.Name;
-            return View(user);
+            Event currentEvent = EventCache.GetEventBag().FirstOrDefault(x => x.Id == roomId);
+            ViewModels.ChatModel chatModel = new ViewModels.ChatModel();
+            chatModel.User = user;
+            chatModel.CurrentEvent = currentEvent;
+            return View(chatModel);
         }
 
         public ActionResult ChooseChat()
         {
-            User user = (User)HttpContext.Session["user"];
+            User user = (User) HttpContext.Session["user"];
             if (user == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -138,7 +149,7 @@ namespace CalgaryHacks.Controllers
         [HttpPost]
         public ActionResult ChooseChat(int roomId)
         {
-            User user = (User)HttpContext.Session["user"];
+            User user = (User) HttpContext.Session["user"];
             if (user == null)
             {
                 return RedirectToAction("Login", "Home");
@@ -159,14 +170,65 @@ namespace CalgaryHacks.Controllers
 
         public ActionResult Analytics()
         {
-            var otherIndicatorsOfLife =
-                db.OtherIndicatorsofLife.ToList().Where(x => x.Year == "2017" || x.Year == "2016");
-
-            ViewBag.OtherIndicatorsOfLife = otherIndicatorsOfLife;
-
-            var pointsOfInterests = db.PointsOfInterest.ToList();
+            var pointsOfInterests = PointsOfInterestCache.GetPointsOfInterestBag().ToList();
 
             return View(pointsOfInterests);
+        }
+
+        public ActionResult Quadrants(string quadrant)
+        {
+            ViewModels.QuadrantModel quadrantModel = new ViewModels.QuadrantModel();
+
+            quadrantModel.Events = EventCache.GetEventBag().Where(x => x.Quadrant == quadrant).ToList();
+            quadrantModel.PointsOfInterests = PointsOfInterestCache.GetPointsOfInterestBag()
+                .Where(x => x.Location == quadrant).ToList();
+
+            switch (quadrant)
+            {
+                case "NW":
+                    quadrantModel.Lat = "51.0750527";
+                    quadrantModel.Lng = "-114.1194289";
+                    quadrantModel.Quadrant = "NW";
+                    quadrantModel.Population = 330000L;
+                    ;
+                    break;
+                case "NE":
+
+                    quadrantModel.Lat = "51.0865101";
+                    quadrantModel.Lng = "-113.967823";
+                    quadrantModel.Quadrant = "NE";
+                    quadrantModel.Population = 265000L;
+                    break;
+                case "SW":
+                    quadrantModel.Lat = "51.0213185";
+                    quadrantModel.Lng = "-114.1023589";
+                    quadrantModel.Quadrant = "SW";
+                    quadrantModel.Population = 280000L;
+
+                    break;
+                case "SE":
+                    quadrantModel.Lat = "51.011528";
+                    quadrantModel.Lng = "-113.9891212";
+                    quadrantModel.Quadrant = "SE";
+                    quadrantModel.Population = 355000L;
+                    break;
+                default:
+                    break;
+
+            }
+            return View(quadrantModel);
+        }
+
+        public ActionResult Heatmap()
+        {
+            ViewModels.HeatMapModel heatMapModel = new ViewModels.HeatMapModel();
+            List<PointsOfInterest> pointsOfInterests = PointsOfInterestCache.GetPointsOfInterestBag();
+
+            heatMapModel.PoliceStations = pointsOfInterests.Where(x => x.Type == "Police Station").ToList();
+            heatMapModel.FireStations = pointsOfInterests.Where(x => x.Type == "Fire Station").ToList();
+            heatMapModel.Libraries = pointsOfInterests.Where(x => x.Type == "Library").ToList();
+            heatMapModel.CommunityCenters = pointsOfInterests.Where(x => x.Type == "Community Center").ToList();
+            return View(heatMapModel);
         }
     }
 }

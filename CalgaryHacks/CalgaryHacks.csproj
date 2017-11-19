@@ -200,6 +200,7 @@
     <Compile Include="DatabaseModel\Location.cs" />
     <Compile Include="DatabaseModel\OtherIndicatorsOfLife.cs" />
     <Compile Include="DatabaseModel\PointsOfInterest.cs" />
+    <Compile Include="DatabaseModel\PointsOfInterestCache.cs" />
     <Compile Include="DatabaseModel\User.cs" />
     <Compile Include="EventDtos\EventfulDTO.cs" />
     <Compile Include="EventDtos\GoogleLocations.cs" />
@@ -252,15 +253,19 @@
     <Content Include="Content\Site.css" />
     <Content Include="images\CommunityCentre.png" />
     <Content Include="images\FireStation.png" />
+    <Content Include="images\Arena.png" />
+    <Content Include="images\Pool.png" />
     <Content Include="images\LRTStation.png" />
     <Content Include="images\PoliceStation.png" />
     <Content Include="images\PublicLibrary.png" />
+    <Content Include="images\Recreational.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\PublishProfiles\CalgaryRegion - Web Deploy.pubxml" />
+    <Content Include="Scripts\CalgaryPolygonsAndMap.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\gmaps.min.js.map" />
@@ -279,6 +284,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\AnalyticsMainPageCharts.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -296,6 +302,10 @@
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\ChooseChat.cshtml" />
     <Content Include="Views\Home\Analytics.cshtml" />
+    <Content Include="Views\Home\Quadrants.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Documentation.cshtml" />
+    <Content Include="Views\Home\Heatmap.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
